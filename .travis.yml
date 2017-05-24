@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - "node"
+  - "6"
+  - "5"
+  - "4"
+
+os:
+  - linux
+  - osx
+
+addons:
+  apt:
+    packages:
+    - lrzsz
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; brew install lrzsz; fi
+
+install:
+  - npm install
+script:
+  - npm test
