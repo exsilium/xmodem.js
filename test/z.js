@@ -1,4 +1,4 @@
-/*describe('XMODEM Cleanup', function() {
+describe('XMODEM Cleanup', function() {
   it('should have 0 connections', function() {
     assert.equal(0, server._connections);
   });
@@ -17,4 +17,4 @@
       assert.equal(undefined, fs.unlinkSync(sendFile));
     });
   }
-});*/
+});
