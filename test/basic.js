@@ -57,10 +57,34 @@ describe('XMODEM Basic', function() {
     }
   });
   
-  describe('Basic send content', function() {
+  describe('Basic send/recv support', function() {
     it('sending file should exist', function() {
       fs.writeFileSync(sendFile, 'Test123');
       assert.equal(true, fs.existsSync(sendFile));
+    });
+    
+    it('sx should exist', function() {
+      const execFile = require('child_process').execFile;
+  
+      const child = execFile('sx', ['--version'], (error, stdout, stderr) => {
+        if (error) {
+          console.error('stderr', stderr);
+          throw error;
+        }
+        assert.equal('sx (lrzsz) 0.12.21rc', stdout);
+      });  
+    });
+    
+    it('rx should exist', function() {
+      const execFile = require('child_process').execFile;
+  
+      const child = execFile('rx', ['--version'], (error, stdout, stderr) => {
+        if (error) {
+          console.error('stderr', stderr);
+          throw error;
+        }
+        assert.equal('rx (lrzsz) 0.12.21rc', stdout);
+      });  
     });
   });
 });
