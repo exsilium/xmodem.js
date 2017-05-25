@@ -1,4 +1,4 @@
-describe('XMODEM Send - checksum', function() {
+describe('XMODEM Send - crc', function() {
   it('rx should connect and start receiving', function(done) {
     this.timeout(60000);
     
@@ -9,7 +9,7 @@ describe('XMODEM Send - checksum', function() {
     
     const execFile = require('child_process').execFile;
   
-    const child = execFile('rx', ['-X', '-a', '--tcp-client', tcpsocket_addr + ':' + tcpsocket_port, receiveFile], (error, stdout, stderr) => {
+    const child = execFile('rx', ['-X', '-c', '-a', '--tcp-client', tcpsocket_addr + ':' + tcpsocket_port, receiveFile], (error, stdout, stderr) => {
       if (error) {
         console.error('stderr', stderr);
         throw error;
