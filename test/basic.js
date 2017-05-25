@@ -1,8 +1,5 @@
 /* Globals */
 assert = require('assert');
-xmodem = require('../lib/index');
-
-net = require('net');
 fs = require('fs');
 
 unixsocket = '/tmp/xmodem.sock';
@@ -14,6 +11,7 @@ sendFile = '/tmp/xmodem.file.send';
 /* End of Globals */
 
 describe('XMODEM Basic', function() {
+  var xmodem = require('../lib/index');
   describe('Version check', function() {
     it('should return 0.0.1', function() {
       assert.equal('0.0.1', xmodem.VERSION);
@@ -21,6 +19,7 @@ describe('XMODEM Basic', function() {
   });
 
   describe('Setup Server', function() {
+    const net = require('net');
     const server = net.createServer();
     
     if(tcpsocket_enable) {
@@ -66,6 +65,7 @@ describe('XMODEM Basic', function() {
       });
       
       server.close();
+      delete require.cache[require.resolve('net')];
     });
     
   });
@@ -111,4 +111,6 @@ describe('XMODEM Basic', function() {
       });
     });
   });
+  
+  delete require.cache[require.resolve('../lib/index.js')];
 });

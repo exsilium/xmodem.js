@@ -1,4 +1,6 @@
 describe('XMODEM Send - checksum', function() {
+  var xmodem = require('../lib/index');
+  const net = require('net');
   const server = net.createServer();
   
   it('rx should connect and start receiving', function(done) {
@@ -33,13 +35,16 @@ describe('XMODEM Send - checksum', function() {
   });
   
   it('receive file should exist', function(done) {
-    assert.equal(true, fs.existsSync(receiveFile));
-    done();
+    setTimeout(function() {
+      assert.equal(true, fs.existsSync(receiveFile));
+      done();
+    }, 100);
   });
   
-  it('send and receive files should be identical', function() {
+  it('send and receive files should be identical', function(done) {
     const md5File = require('md5-file');
     assert.equal(md5File.sync(sendFile), md5File.sync(receiveFile));
+    done();
   });
   
   it('receiveFile rm should return undefined', function(done) {
@@ -56,7 +61,10 @@ describe('XMODEM Send - checksum', function() {
     server.once('close', function() {
       done();
     });
-      
+    
+    delete require.cache[require.resolve('net')];  
     server.close();
   });
+  
+  delete require.cache[require.resolve('../lib/index.js')];
 });
