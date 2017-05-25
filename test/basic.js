@@ -36,34 +36,40 @@ describe('XMODEM Basic', function() {
       ad = server.address();
     });
     
-    it('should have 0 connections', function() {
+    it('should have 0 connections', function(done) {
         assert.equal(0, server._connections);
+        done();
     });
     
     if (typeof ad === 'string') {
-      it('should have unix socket address', function() {
+      it('should have unix socket address', function(done) {
         assert.equal(unixsocket, ad);
+        done();
       });
     } else {
-      it('should have tcp socket address', function() {
+      it('should have tcp socket address', function(done) {
         assert.equal(tcpsocket_addr, ad.address);
+        done();
       });
-      it('should have tcp socket port', function() {
+      it('should have tcp socket port', function(done) {
         assert.equal(tcpsocket_port, ad.port);
+        done();
       });
-      it('should be IPv4 family', function() {
+      it('should be IPv4 family', function(done) {
         assert.equal('IPv4', ad.family);
+        done();
       });
     }
   });
   
   describe('Basic send/recv support', function() {
-    it('sending file should exist', function() {
+    it('sending file should exist', function(done) {
       fs.writeFileSync(sendFile, 'Test123');
       assert.equal(true, fs.existsSync(sendFile));
+      done();
     });
     
-    it('sx should exist', function() {
+    it('sx should exist', function(done) {
       const execFile = require('child_process').execFile;
   
       const child = execFile('sx', ['--version'], (error, stdout, stderr) => {
@@ -71,11 +77,16 @@ describe('XMODEM Basic', function() {
           console.error('stderr', stderr);
           throw error;
         }
-        assert.equal('sx (lrzsz) 0.12.21rc', stdout);
-      });  
+        assert.equal('sx (lrzsz) 0.12.21rc\n', stdout);
+      }); 
+      
+      child.once('close', function(code) {
+        assert.equal(0, code);
+        done();
+      });
     });
     
-    it('rx should exist', function() {
+    it('rx should exist', function(done) {
       const execFile = require('child_process').execFile;
   
       const child = execFile('rx', ['--version'], (error, stdout, stderr) => {
@@ -83,8 +94,13 @@ describe('XMODEM Basic', function() {
           console.error('stderr', stderr);
           throw error;
         }
-        assert.equal('rx (lrzsz) 0.12.21rc', stdout);
-      });  
+        assert.equal('rx (GNU lrzsz) 0.12.21rc\n', stdout);
+      });
+      
+      child.once('close', function(code) {
+        assert.equal(0, code);
+        done();
+      });
     });
   });
 });
