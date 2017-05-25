@@ -1,6 +1,15 @@
 describe('XMODEM Receive', function() {
+  const server = net.createServer();
+  
   it('sx should connect and start sending', function(done) {
     this.timeout(5000);
+    
+    if(tcpsocket_enable) {
+      server.listen(tcpsocket_port, tcpsocket_addr);
+    }
+    else {
+      server.listen(unixsocket);  
+    }
     
     server.once('connection', function(socket) {
       xmodem.receive(socket, receiveFile);
@@ -41,5 +50,13 @@ describe('XMODEM Receive', function() {
   it('socket should have 0 connections', function(done) {
     assert.equal(0, server._connections);
     done();
+  });
+  
+  it('server should close', function(done) {
+    server.once('close', function() {
+      done();
+    });
+      
+    server.close();
   });
 });

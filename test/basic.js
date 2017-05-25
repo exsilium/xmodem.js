@@ -5,7 +5,6 @@ xmodem = require('../lib/index');
 net = require('net');
 fs = require('fs');
 
-server = null;
 unixsocket = '/tmp/xmodem.sock';
 tcpsocket_addr = '127.0.0.1';
 tcpsocket_port = 33949;
@@ -22,7 +21,7 @@ describe('XMODEM Basic', function() {
   });
 
   describe('Setup Server', function() {
-    server = net.createServer();
+    const server = net.createServer();
     
     if(tcpsocket_enable) {
       server.listen(tcpsocket_port, tcpsocket_addr);
@@ -60,6 +59,15 @@ describe('XMODEM Basic', function() {
         done();
       });
     }
+    
+    it('server should close', function(done) {
+      server.once('close', function() {
+        done();
+      });
+      
+      server.close();
+    });
+    
   });
   
   describe('Basic send/recv support', function() {

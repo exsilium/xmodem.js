@@ -1,6 +1,15 @@
 describe('XMODEM Send - checksum', function() {
+  const server = net.createServer();
+  
   it('rx should connect and start receiving', function(done) {
     this.timeout(60000);
+    
+    if(tcpsocket_enable) {
+      server.listen(tcpsocket_port, tcpsocket_addr);
+    }
+    else {
+      server.listen(unixsocket);  
+    }
     
     server.once('connection', function(socket) {
       var buffer = fs.readFileSync(sendFile);
@@ -41,5 +50,13 @@ describe('XMODEM Send - checksum', function() {
   it('socket should have 0 connections', function(done) {
     assert.equal(0, server._connections);
     done();
+  });
+  
+  it('server should close', function(done) {
+    server.once('close', function() {
+      done();
+    });
+      
+    server.close();
   });
 });

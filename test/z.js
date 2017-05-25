@@ -1,10 +1,6 @@
 describe('XMODEM Cleanup', function() {
   this.timeout(5000);
   setTimeout(function() { 
-    it('should have 0 connections', function(done) {
-      assert.equal(0, server._connections);
-      done();
-    });
     if(fs.existsSync(unixsocket) === true) {
       it('unixsocket rm should return undefined', function(done) {
         assert.equal(undefined, fs.unlinkSync(unixsocket));
