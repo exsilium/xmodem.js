@@ -1,5 +1,5 @@
 /* Globals */
-assert = require('assert');
+assert = require('chai').assert;
 fs = require('fs');
 
 unixsocket = '/tmp/xmodem.sock';
@@ -77,15 +77,19 @@ describe('XMODEM Basic', function() {
       done();
     });
     
-    it('sx should exist', function(done) {
+    /* When lrzsz is installed via brew on Mac, only rz/sz
+     * binaries are available!
+     */
+    it('sz should exist', function(done) {
       const execFile = require('child_process').execFile;
   
-      const child = execFile('sx', ['--version'], (error, stdout, stderr) => {
+      const child = execFile('sz', ['--version'], (error, stdout, stderr) => {
         if (error) {
           console.error('stderr', stderr);
           throw error;
         }
-        assert.equal('sx (lrzsz) 0.12.21rc\n', stdout);
+        assert.include(stdout, 'sz');
+        assert.include(stdout, 'lrzsz');
       }); 
       
       child.once('close', function(code) {
@@ -94,15 +98,16 @@ describe('XMODEM Basic', function() {
       });
     });
     
-    it('rx should exist', function(done) {
+    it('rz should exist', function(done) {
       const execFile = require('child_process').execFile;
   
-      const child = execFile('rx', ['--version'], (error, stdout, stderr) => {
+      const child = execFile('rz', ['--version'], (error, stdout, stderr) => {
         if (error) {
           console.error('stderr', stderr);
           throw error;
         }
-        assert.equal('rx (GNU lrzsz) 0.12.21rc\n', stdout);
+        assert.include(stdout, 'rz');
+        assert.include(stdout, 'lrzsz');
       });
       
       child.once('close', function(code) {

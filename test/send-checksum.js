@@ -3,7 +3,7 @@ describe('XMODEM Send - checksum', function() {
   const net = require('net');
   const server = net.createServer();
   
-  it('rx should connect and start receiving', function(done) {
+  it('rz should connect and start receiving', function(done) {
     this.timeout(60000);
     
     if(tcpsocket_enable) {
@@ -20,7 +20,7 @@ describe('XMODEM Send - checksum', function() {
     
     const execFile = require('child_process').execFile;
   
-    const child = execFile('rx', ['-X', '-a', '--tcp-client', tcpsocket_addr + ':' + tcpsocket_port, receiveFile], (error, stdout, stderr) => {
+    const child = execFile('rz', ['-X', '-a', '--tcp-client', tcpsocket_addr + ':' + tcpsocket_port, receiveFile], (error, stdout, stderr) => {
       if (error) {
         console.error('stderr', stderr);
         throw error;

@@ -3,7 +3,7 @@ describe('XMODEM Receive', function() {
   const net = require('net');
   const server = net.createServer();
   
-  it('sx should connect and start sending', function(done) {
+  it('sz should connect and start sending', function(done) {
     this.timeout(5000);
     
     if(tcpsocket_enable) {
@@ -19,7 +19,7 @@ describe('XMODEM Receive', function() {
     
     const execFile = require('child_process').execFile;
   
-    const child = execFile('sx', ['-X', '-b', '--tcp-client', tcpsocket_addr + ':' + tcpsocket_port, sendFile], (error, stdout, stderr) => {
+    const child = execFile('sz', ['-X', '-b', '--tcp-client', tcpsocket_addr + ':' + tcpsocket_port, sendFile], (error, stdout, stderr) => {
       if (error) {
         console.error('stderr', stderr);
         throw error;
