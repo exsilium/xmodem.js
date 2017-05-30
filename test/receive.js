@@ -6,6 +6,23 @@ describe('XMODEM Receive', function() {
   it('sz should connect and start sending', function(done) {
     this.timeout(5000);
     
+    server.once('listening', function() {
+      const execFile = require('child_process').execFile;
+  
+      const child = execFile('sz', ['-X', '-b', '--tcp-client', tcpsocket_addr + ':' + tcpsocket_port, sendFile], (error, stdout, stderr) => {
+        if (error) {
+          console.error('stderr', stderr);
+          throw error;
+        }
+        assert.equal('connecting to [' + tcpsocket_addr + '] <' + tcpsocket_port + '>\n\n', stdout);
+      });  
+    
+      child.once('close', function(code) {
+        assert.equal(0, code);
+        done();
+      });
+    });
+    
     if(tcpsocket_enable) {
       server.listen(tcpsocket_port, tcpsocket_addr);
     }
@@ -15,21 +32,6 @@ describe('XMODEM Receive', function() {
     
     server.once('connection', function(socket) {
       xmodem.receive(socket, receiveFile);
-    });
-    
-    const execFile = require('child_process').execFile;
-  
-    const child = execFile('sz', ['-X', '-b', '--tcp-client', tcpsocket_addr + ':' + tcpsocket_port, sendFile], (error, stdout, stderr) => {
-      if (error) {
-        console.error('stderr', stderr);
-        throw error;
-      }
-      assert.equal('connecting to [' + tcpsocket_addr + '] <' + tcpsocket_port + '>\n\n', stdout);
-    });  
-    
-    child.once('close', function(code) {
-      assert.equal(0, code);
-      done();
     });
   });
   
