@@ -1,23 +1,22 @@
 describe('XMODEM Cleanup', function() {
-  this.timeout(5000);
-  setTimeout(function() { 
+  it('unixsocket rm should return undefined if any', function(done) {
     if(fs.existsSync(unixsocket) === true) {
-      it('unixsocket rm should return undefined', function(done) {
-        assert.equal(undefined, fs.unlinkSync(unixsocket));
-        done();
-      });
+      assert.equal(undefined, fs.unlinkSync(unixsocket));
     }
+    done();
+  });
+  
+  it('receiveFile rm should return undefined if any', function(done) {
     if(fs.existsSync(receiveFile) === true) {
-      it('receiveFile rm should return undefined', function(done) {
-        assert.equal(undefined, fs.unlinkSync(receiveFile));
-        done();
-      });
+      assert.equal(undefined, fs.unlinkSync(receiveFile));
     }
+    done();
+  });
+  
+  it('sendFile rm should return undefined if any', function(done) {
     if(fs.existsSync(sendFile) === true) {
-      it('sendFile rm should return undefined', function(done) {
-        assert.equal(undefined, fs.unlinkSync(sendFile));
-        done();
-      });
+      assert.equal(undefined, fs.unlinkSync(sendFile));
     }
-  }, 1000);
+    done();
+  });
 });
