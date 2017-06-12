@@ -2,6 +2,11 @@ describe('XMODEM Receive', function() {
   var xmodem = require('../lib/index');
   const net = require('net');
   const server = net.createServer();
+
+  it('xmodem should be in crc mode', function(done) {
+    assert.equal(xmodem.XMODEM_OP_MODE, 'crc');
+    done();
+  });
   
   it('sz should connect and start sending', function(done) {
     this.timeout(5000);
