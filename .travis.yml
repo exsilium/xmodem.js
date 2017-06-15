@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - "node"
+  - "7"
   - "6"
   - "5"
   - "4"
@@ -11,11 +12,16 @@ os:
 
 addons:
   apt:
+    sources:
+    - ubuntu-toolchain-r-test
     packages:
+    - g++-4.9
     - lrzsz
+    - socat
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; brew install lrzsz; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; brew install lrzsz socat; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then export CXX=g++-4.9; fi
 
 install:
   - npm install
