@@ -12,9 +12,9 @@ if(commandExistsSync('socat')) {
     const serialport = require('serialport');
     var child;
     
-    var sendPort = "";
+    var sendPort = process.env.HOME + '/ttyXM01';
     var sPort;
-    var recvPort = "";
+    var recvPort = process.env.HOME + '/ttyXM02';
     var rPort;
     
     // Setting up virtual ports 
@@ -22,20 +22,12 @@ if(commandExistsSync('socat')) {
     it('setup pair of virtual serialports', function(done) {
       const spawn = require('child_process').spawn;
     
-      child = spawn('socat', ['-d', '-d', 'pty,raw,echo=0', 'pty,raw,echo=0']);
+      child = spawn('socat', ['-d', '-d', 'pty,raw,echo=0,link=' + sendPort, 'pty,raw,echo=0,link=' + recvPort]);
       
       child.stderr.on('data', (data) => {
         // Socat returns the allocated PTY terminal references to stderr
-        if(data.indexOf("N PTY is ") >= 0) {
-          if(sendPort === "") {
-            sendPort = String(data).substring(data.indexOf("N PTY is ") + 9, data.length - 1);
-          }
-          else if(recvPort === "") {
-            recvPort = String(data).substring(data.indexOf("N PTY is ") + 9, data.length - 1);
-            assert.include(sendPort, '/dev/');
-            assert.include(recvPort, '/dev/');
-            done();
-          }
+        if(data.indexOf("starting data transfer loop with FDs") >= 0) {
+          done();
         }
       });
     });
