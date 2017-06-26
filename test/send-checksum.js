@@ -1,5 +1,5 @@
 describe('XMODEM Send - checksum', function() {
-  var xmodem = require('../lib/index');
+  var xmodem = require(libpath + '/index');
   const net = require('net');
   const server = net.createServer();
   
@@ -32,6 +32,31 @@ describe('XMODEM Send - checksum', function() {
     
     server.once('connection', function(socket) {
       var buffer = fs.readFileSync(sendFile);
+      
+      xmodem.once('ready', function(bufferLength) {
+        assert.equal(1, bufferLength);
+      });
+      
+      xmodem.once('start', function(mode) {
+        assert.equal('normal', mode);
+      });
+      
+      xmodem.on('status', function(data) {
+        if(data.action === 'send' && data.signal === 'SOH') {
+          assert.equal(1, data.block);
+        }
+        else if(data.action === 'send') {
+          assert.equal('EOT', data.signal);
+        }
+        else if(data.action === 'recv') {
+          assert.equal('ACK', data.signal); 
+        }
+      });
+      
+      xmodem.once('stop', function(code) {
+        assert.equal(0, code);
+      });
+      
       xmodem.send(socket, buffer);
     });
     
@@ -70,5 +95,5 @@ describe('XMODEM Send - checksum', function() {
     server.close();
   });
   
-  delete require.cache[require.resolve('../lib/index.js')];
+  delete require.cache[require.resolve(libpath + '/index.js')];
 });

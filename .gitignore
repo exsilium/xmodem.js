@@ -3,3 +3,5 @@
 node_modules/
 mochawesome-report/
 mochawesome-reports/
+out/
+lib-cov

@@ -31,8 +31,8 @@ describe('Big payload', function() {
   
   // Transfer - crc
   
-  var xmodemSend = require('../lib/index');
-  var xmodemRecv = require('../lib/index');
+  var xmodemSend = require(libpath + '/index');
+  var xmodemRecv = require(libpath + '/index');
   const net = require('net');
   const client = new net.Socket();
   const server = net.createServer();
@@ -161,7 +161,7 @@ describe('Big payload', function() {
     server.close();
   });
 
-  delete require.cache[require.resolve('../lib/index.js')];
+  delete require.cache[require.resolve(libpath + '/index.js')];
   
   // Payload Cleanup
   

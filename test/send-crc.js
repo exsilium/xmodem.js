@@ -1,5 +1,5 @@
 describe('XMODEM Send - crc', function() {
-  var xmodem = require('../lib/index');
+  var xmodem = require(libpath + '/index');
   const net = require('net');
   const server = net.createServer();
   
@@ -70,5 +70,5 @@ describe('XMODEM Send - crc', function() {
     delete require.cache[require.resolve('net')];
   });
   
-  delete require.cache[require.resolve('../lib/index.js')];
+  delete require.cache[require.resolve(libpath + '/index.js')];
 });

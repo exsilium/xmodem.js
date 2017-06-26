@@ -27,3 +27,7 @@ install:
   - npm install
 script:
   - npm test
+
+after_success:
+  - ./node_modules/.bin/jscoverage lib lib-cov
+  - XMODEM_COV=1 node_modules/.bin/mocha -S --bail --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js

@@ -7,8 +7,8 @@ var commandExistsSync = require('command-exists').sync;
 
 if(commandExistsSync('socat')) {
   describe('XMODEM Serialport sending - receiving', function() {
-    const xmodemSend = require('../lib/index');
-    const xmodemRecv = require('../lib/index');
+    const xmodemSend = require(libpath + '/index');
+    const xmodemRecv = require(libpath + '/index');
     const serialport = require('serialport');
     var child;
     
@@ -148,6 +148,6 @@ if(commandExistsSync('socat')) {
       child.kill('SIGHUP');
     });
     
-    delete require.cache[require.resolve('../lib/index.js')];
+    delete require.cache[require.resolve(libpath + '/index.js')];
   });
 } // if(commandExistsSync('socat'))

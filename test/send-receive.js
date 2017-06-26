@@ -3,8 +3,8 @@
    use external binaries.
  */
 describe('XMODEM Send - Receive', function() {
-  var xmodemSend = require('../lib/index');
-  var xmodemRecv = require('../lib/index');
+  var xmodemSend = require(libpath + '/index');
+  var xmodemRecv = require(libpath + '/index');
   const net = require('net');
   const client = new net.Socket();
   const server = net.createServer();
@@ -133,5 +133,5 @@ describe('XMODEM Send - Receive', function() {
     server.close();
   });
 
-  delete require.cache[require.resolve('../lib/index.js')];
+  delete require.cache[require.resolve(libpath + '/index.js')];
 });

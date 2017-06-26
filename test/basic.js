@@ -1,6 +1,7 @@
 /* Globals */
 assert = require('chai').assert;
 fs = require('fs');
+libpath = process.env['XMODEM_COV'] ? '../lib-cov' : '../lib';
 
 unixsocket = '/tmp/xmodem.sock';
 tcpsocket_addr = '127.0.0.1';
@@ -11,7 +12,7 @@ sendFile = '/tmp/xmodem.file.send';
 /* End of Globals */
 
 describe('XMODEM Basic', function() {
-  var xmodem = require('../lib/index');
+  var xmodem = require(libpath + '/index');
   describe('Version check', function() {
     it('should return 0.0.1', function() {
       assert.equal('0.0.1', xmodem.VERSION);
@@ -117,5 +118,5 @@ describe('XMODEM Basic', function() {
     });
   });
   
-  delete require.cache[require.resolve('../lib/index.js')];
+  delete require.cache[require.resolve(libpath + '/index.js')];
 });

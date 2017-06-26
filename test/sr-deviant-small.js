@@ -4,8 +4,8 @@
  * XMODEM protocol with 64 byte block size
  */
 describe('XMODEM Send - Receive - Deviant Block (64 bytes)', function() {
-  var xmodemSend = require('../lib/index');
-  var xmodemRecv = require('../lib/index');
+  var xmodemSend = require(libpath + '/index');
+  var xmodemRecv = require(libpath + '/index');
 
   const net = require('net');
   const client = new net.Socket();
@@ -143,5 +143,5 @@ describe('XMODEM Send - Receive - Deviant Block (64 bytes)', function() {
     server.close();
   });
 
-  delete require.cache[require.resolve('../lib/index.js')];
+  delete require.cache[require.resolve(libpath + '/index.js')];
 });
