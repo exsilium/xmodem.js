@@ -1,0 +1,502 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.4.3">
+  <meta charset="utf-8">
+  <title>xmodem.js 0.0.1 &raquo; Source: index.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">xmodem.<wbr>js 0.<wbr>0.<wbr>1</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: index.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * Instantiate by &#x60;var xmodem &#x3D; require(&#x27;xmodem.js&#x27;);&#x60;
+ * @class
+ * @classdesc XMODEM Protocol in JavaScript
+ * @name Xmodem
+ * @license BSD-2-Clause
+ */
+var Xmodem &#x3D; function () {};
+
+var fs &#x3D; require(&#x27;fs&#x27;);
+var crc &#x3D; require(&#x27;crc&#x27;);
+var events &#x3D; require(&#x27;events&#x27;);
+
+/* Either use the tracer module to output infromation
+ * or redefine the functions for silence!
+ */
+//const log &#x3D; require(&#x27;tracer&#x27;).colorConsole();
+const log &#x3D; { info: function() {}, warn: function() {}, error: function() {}, debug: function() {} };
+
+const SOH &#x3D; 0x01;
+const EOT &#x3D; 0x04;
+const ACK &#x3D; 0x06;
+const NAK &#x3D; 0x15;
+const CAN &#x3D; 0x18; // not implemented
+const FILLER &#x3D; 0x1A;
+const CRC_MODE &#x3D; 0x43; // &#x27;C&#x27;
+
+var receive_interval_timer &#x3D; false;
+
+Xmodem.prototype &#x3D; new events.EventEmitter();
+
+/**
+ * xmodem.js package version.
+ * @constant
+ * @type {string}
+ */
+Xmodem.prototype.VERSION &#x3D; require(&#x27;../package.json&#x27;).version;
+
+/** 
+ * how many timeouts in a row before the sender gives up?
+ * @constant
+ * @type {integer}
+ * @default
+ */
+Xmodem.prototype.XMODEM_MAX_TIMEOUTS &#x3D; 5;
+
+/** 
+ * how many errors on a single block before the receiver gives up?
+ * @constant
+ * @type {integer}
+ * @default
+ */
+Xmodem.prototype.XMODEM_MAX_ERRORS &#x3D; 10;
+
+/** 
+ * how many times should receiver attempt to use CRC?
+ * @constant
+ * @type {integer}
+ * @default
+ */
+Xmodem.prototype.XMODEM_CRC_ATTEMPTS &#x3D; 3;
+
+/** 
+ * Try to use XMODEM-CRC extension or not? Valid options: &#x27;crc&#x27; or &#x27;normal&#x27;
+ * @constant
+ * @type {string}
+ * @default
+ */
+Xmodem.prototype.XMODEM_OP_MODE &#x3D; &#x27;crc&#x27;;
+
+/** 
+ * First block number. Don&#x27;t change this unless you have need for non-standard
+ * implementation.
+ * @constant
+ * @type {integer}
+ * @default
+ */
+Xmodem.prototype.XMODEM_START_BLOCK &#x3D; 1;
+
+/** 
+ * default timeout period in seconds
+ * @constant
+ * @type {integer}
+ * @default
+ */
+Xmodem.prototype.timeout_seconds &#x3D; 10;
+
+/** 
+ * how many bytes (excluding header &amp;amp; checksum) in each block? Don&#x27;t change this
+ * unless you have need for non-standard implementation.
+ * @constant
+ * @type {integer}
+ * @default
+ */
+Xmodem.prototype.block_size &#x3D; 128;
+
+/**
+ * Send a file using XMODEM protocol
+ * @method
+ * @name Xmodem#send
+ * @param {socket} socket - net.Socket() or Serialport socket for transport
+ * @param {buffer} dataBuffer - Buffer() to be sent
+ */
+Xmodem.prototype.send &#x3D; function(socket, dataBuffer) {
+  var blockNumber &#x3D; this.XMODEM_START_BLOCK;
+  var packagedBuffer &#x3D; new Array();
+  var current_block &#x3D; new Buffer(this.block_size);
+  var sent_eof &#x3D; false;
+  var _self &#x3D; this;
+  
+  this.log(dataBuffer.length);
+  
+  private_stuff();
+  
+  // FILLER
+  for(i&#x3D;0; i &amp;lt; this.XMODEM_START_BLOCK; i++) {
+    packagedBuffer.push(&quot;&quot;);
+  }
+  
+  while (dataBuffer.length &gt; 0) {
+    for(i&#x3D;0; i &amp;lt; this.block_size; i++) {
+      current_block[i] &#x3D; dataBuffer[i] &#x3D;&#x3D;&#x3D; undefined ? FILLER : dataBuffer[i];
+    }
+    dataBuffer &#x3D; dataBuffer.slice(this.block_size);
+    packagedBuffer.push(current_block);
+    current_block &#x3D; new Buffer(this.block_size);
+  }
+  
+  /**
+   * Ready to send event, buffer has been broken into individual blocks to be sent.
+   * @event Xmodem#ready
+   * @property {integer} - Indicates how many blocks are ready for transmission
+   */
+  _self.emit(&#x27;ready&#x27;, packagedBuffer.length - 1); // We don&#x27;t count the filler
+
+  const sendData &#x3D; function(data) {
+    /* 
+     * Here we handle the beginning of the transmission
+     * The receiver initiates the transfer by either calling
+     * checksum mode or CRC mode.
+     */
+    if(data[0] &#x3D;&#x3D;&#x3D; CRC_MODE &amp;amp;&amp;amp; blockNumber &#x3D;&#x3D;&#x3D; _self.XMODEM_START_BLOCK) {
+      log.info(&quot;[SEND] - received C byte for CRC transfer!&quot;);
+      _self.XMODEM_OP_MODE &#x3D; &#x27;crc&#x27;;
+      if(packagedBuffer.length &gt; blockNumber) {
+        /**
+         * Transmission Start event. A successful start of transmission.
+         * @event Xmodem#start
+         * @property {string} - Indicates transmission mode &#x27;crc&#x27; or &#x27;normal&#x27;
+         */
+        _self.emit(&#x27;start&#x27;, _self.XMODEM_OP_MODE);
+        sendBlock(socket, blockNumber, packagedBuffer[blockNumber], _self.XMODEM_OP_MODE);
+        _self.emit(&#x27;status&#x27;, { action: &#x27;send&#x27;, signal: &#x27;SOH&#x27;, block: blockNumber });
+        blockNumber++;
+      }
+    }
+    else if(data[0] &#x3D;&#x3D;&#x3D; NAK &amp;amp;&amp;amp; blockNumber &#x3D;&#x3D;&#x3D; _self.XMODEM_START_BLOCK) {
+      log.info(&quot;[SEND] - received NAK byte for standard checksum transfer!&quot;);
+      _self.XMODEM_OP_MODE &#x3D; &#x27;normal&#x27;;
+      if(packagedBuffer.length &gt; blockNumber) {
+        _self.emit(&#x27;start&#x27;, _self.XMODEM_OP_MODE);
+        sendBlock(socket, blockNumber, packagedBuffer[blockNumber], _self.XMODEM_OP_MODE);
+        _self.emit(&#x27;status&#x27;, { action: &#x27;send&#x27;, signal: &#x27;SOH&#x27;, block: blockNumber });
+        blockNumber++;
+      }
+    }
+    /*
+     * Here we handle the actual transmission of data and
+     * retransmission in case the block was not accepted.
+     */
+    else if(data[0] &#x3D;&#x3D;&#x3D; ACK &amp;amp;&amp;amp; blockNumber &gt; _self.XMODEM_START_BLOCK) {
+      // Woohooo we are ready to send the next block! :)
+      log.info(&#x27;ACK RECEIVED&#x27;);
+      _self.emit(&#x27;status&#x27;, { action: &#x27;recv&#x27;, signal: &#x27;ACK&#x27; });
+      if(packagedBuffer.length &gt; blockNumber) {
+        sendBlock(socket, blockNumber, packagedBuffer[blockNumber], _self.XMODEM_OP_MODE);
+        _self.emit(&#x27;status&#x27;, { action: &#x27;send&#x27;, signal: &#x27;SOH&#x27;, block: blockNumber });
+        blockNumber++;
+      }
+      else if(packagedBuffer.length &#x3D;&#x3D;&#x3D; blockNumber) {
+        // We are EOT
+        if(sent_eof &#x3D;&#x3D;&#x3D; false) {
+          sent_eof &#x3D; true;
+          log.info(&quot;WE HAVE RUN OUT OF STUFF TO SEND, EOT EOT!&quot;);
+          _self.emit(&#x27;status&#x27;, { action: &#x27;send&#x27;, signal: &#x27;EOT&#x27; });
+          socket.write(new Buffer([EOT]));
+        }
+        else {
+          // We are finished!
+          log.info(&#x27;[SEND] - Finished!&#x27;);
+          _self.emit(&#x27;stop&#x27;, 0);
+          socket.removeListener(&#x27;data&#x27;, sendData);
+        }
+      }
+    }
+    else if(data[0] &#x3D;&#x3D;&#x3D; NAK &amp;amp;&amp;amp; blockNumber &gt; _self.XMODEM_START_BLOCK) {
+      log.info(&#x27;[SEND] - Packet corruption detected, resending previous block.&#x27;);
+      _self.emit(&#x27;status&#x27;, { action: &#x27;recv&#x27;, signal: &#x27;NAK&#x27; });
+      blockNumber--;
+      if(packagedBuffer.length &gt; blockNumber) {
+        sendBlock(socket, blockNumber, packagedBuffer[blockNumber], _self.XMODEM_OP_MODE);
+        _self.emit(&#x27;status&#x27;, { action: &#x27;send&#x27;, signal: &#x27;SOH&#x27;, block: blockNumber });
+        blockNumber++;
+      }
+    }
+    else {
+      log.warn(&quot;GOT SOME UNEXPECTED DATA which was not handled properly!&quot;);
+      log.warn(&quot;&#x3D;&#x3D;&#x3D;&gt;&quot;);
+      log.warn(data);
+      log.warn(&quot;&amp;lt;&#x3D;&#x3D;&#x3D;&quot;);
+      log.warn(&quot;blockNumber: &quot; + blockNumber);
+    }
+  };
+  
+  socket.on(&#x27;data&#x27;, sendData);
+  
+};
+
+/**
+ * Receive a file using XMODEM protocol
+ * @method
+ * @name Xmodem#receive
+ * @param {socket} socket - net.Socket() or Serialport socket for transport
+ * @param {string} filename - pathname where to save the transferred file
+ */
+Xmodem.prototype.receive &#x3D; function(socket, filename) {
+  var blockNumber &#x3D; this.XMODEM_START_BLOCK;
+  var packagedBuffer &#x3D; new Array();
+  var nak_tick &#x3D; this.XMODEM_MAX_ERRORS * this.timeout_seconds * 3;
+  var crc_tick &#x3D; this.XMODEM_CRC_ATTEMPTS;
+  var transfer_initiated &#x3D; false;
+  var tryCounter &#x3D; 0;
+  var _self &#x3D; this;
+  
+  // FILLER
+  for(i&#x3D;0; i &amp;lt; this.XMODEM_START_BLOCK; i++) {
+    packagedBuffer.push(&quot;&quot;);
+  }
+
+  // Let&#x27;s try to initate transfer with XMODEM-CRC
+  if(this.XMODEM_OP_MODE &#x3D;&#x3D;&#x3D; &#x27;crc&#x27;) {
+    log.info(&quot;CRC init sent&quot;);
+    socket.write(new Buffer([CRC_MODE]));
+    receive_interval_timer &#x3D; setIntervalX(function () {
+      if (transfer_initiated &#x3D;&#x3D;&#x3D; false) {
+        log.info(&quot;CRC init sent&quot;);
+        socket.write(new Buffer([CRC_MODE]));
+      }
+      else {
+        clearInterval(receive_interval_timer);
+        receive_interval_timer &#x3D; false;
+      }
+      // Fallback to standard XMODEM
+      if (receive_interval_timer &#x3D;&#x3D;&#x3D; false &amp;amp;&amp;amp; transfer_initiated &#x3D;&#x3D;&#x3D; false) {
+        receive_interval_timer &#x3D; setIntervalX(function () {
+          log.info(&quot;NAK init sent&quot;);
+          socket.write(new Buffer([NAK]));
+          _self.XMODEM_OP_MODE &#x3D; &#x27;normal&#x27;;
+        }, 3000, nak_tick);
+      }
+    }, 3000, (crc_tick - 1));
+  }
+  else {
+    receive_interval_timer &#x3D; setIntervalX(function () {
+      log.info(&quot;NAK init sent&quot;);
+      socket.write(new Buffer([NAK]));
+      _self.XMODEM_OP_MODE &#x3D; &#x27;normal&#x27;;
+    }, 3000, nak_tick);
+  }
+  
+  const receiveData &#x3D; function(data) {
+    tryCounter++;
+    log.info(&#x27;[RECV] - Received: &#x27; + data.toString(&#x27;utf-8&#x27;));
+    log.info(data);
+    if(data[0] &#x3D;&#x3D;&#x3D; NAK &amp;amp;&amp;amp; blockNumber &#x3D;&#x3D;&#x3D; this.XMODEM_START_BLOCK) {
+      log.info(&quot;[RECV] - received NAK byte!&quot;);
+    }
+    else if(data[0] &#x3D;&#x3D;&#x3D; SOH &amp;amp;&amp;amp; tryCounter &amp;lt;&#x3D; _self.XMODEM_MAX_ERRORS) {
+      if(transfer_initiated &#x3D;&#x3D;&#x3D; false) {
+        // Initial byte received
+        transfer_initiated &#x3D; true;
+        clearInterval(receive_interval_timer);
+        receive_interval_timer &#x3D; false;
+      }
+
+      receiveBlock(socket, blockNumber, data, _self.block_size, _self.XMODEM_OP_MODE, function(current_block) {
+        log.info(current_block);
+        packagedBuffer.push(current_block);
+        tryCounter &#x3D; 0;
+        blockNumber++;
+      });
+    }
+    else if(data[0] &#x3D;&#x3D;&#x3D; EOT) {
+      log.info(&quot;Received EOT&quot;);
+      socket.write(new Buffer([ACK]));
+      blockNumber--;
+      for(i &#x3D; packagedBuffer[blockNumber].length - 1; i &gt;&#x3D; 0; i--) {
+        if(packagedBuffer[blockNumber][i] &#x3D;&#x3D;&#x3D; FILLER) {
+          continue;
+        }
+        else {
+          packagedBuffer[blockNumber] &#x3D; packagedBuffer[blockNumber].slice(0, i + 1);
+          break;
+        }
+      }
+      // At this stage the packaged buffer should be ready for writing
+      writeFile(packagedBuffer, filename, function() {
+        if(socket.constructor.name &#x3D;&#x3D;&#x3D; &quot;Socket&quot;) {
+          socket.destroy();
+        }
+        else if(socket.constructor.name &#x3D;&#x3D;&#x3D; &quot;SerialPort&quot;) {
+          socket.close();
+        }
+        // remove the data listener
+        socket.removeListener(&#x27;data&#x27;, receiveData);
+      });
+    }
+    else {
+      log.warn(&quot;GOT SOME UNEXPECTED DATA which was not handled properly!&quot;);
+      log.warn(&quot;&#x3D;&#x3D;&#x3D;&gt;&quot;);
+      log.warn(data);
+      log.warn(&quot;&amp;lt;&#x3D;&#x3D;&#x3D;&quot;);
+      log.warn(&quot;blockNumber: &quot; + blockNumber);
+    }
+  };
+  
+  socket.on(&#x27;data&#x27;, receiveData);
+  
+};
+
+Xmodem.prototype.log &#x3D; function(data) {
+  log.info(&#x27;modem! : &#x27; + data);
+};
+
+module.exports &#x3D; new Xmodem();
+
+// Utility functions that are not exported
+var private_stuff &#x3D; function() {
+  log.info(&quot;This is private&quot;);
+};
+
+/** 
+ * Internal helper function for scoped intervals
+ * @private
+ */
+var setIntervalX &#x3D; function(callback, delay, repetitions) {
+  var x &#x3D; 0;
+  var intervalID &#x3D; setInterval(function () {
+    if (++x &#x3D;&#x3D;&#x3D; repetitions) {
+      clearInterval(intervalID);
+      receive_interval_timer &#x3D; false;
+    }
+    callback();
+  }, delay);
+  return intervalID;
+};
+
+var sendBlock &#x3D; function(socket, blockNr, blockData, mode) {
+  var crcCalc &#x3D; 0;
+  var sendBuffer &#x3D; Buffer.concat([new Buffer([SOH]),
+                                  new Buffer([blockNr]),
+                                  new Buffer([(0xFF - blockNr)]),
+                                  blockData
+                                  ]);
+  log.info(&#x27;SENDBLOCK! Data length: &#x27; + blockData.length);
+  log.info(sendBuffer);
+  if(mode &#x3D;&#x3D;&#x3D; &#x27;crc&#x27;) {
+    var crcString &#x3D; crc.crc16xmodem(blockData).toString(16);
+    // Need to avoid odd string for Buffer creation
+    if(crcString.length % 2 &#x3D;&#x3D; 1) {
+      crcString &#x3D; &#x27;0&#x27;.concat(crcString);
+    }
+    // CRC must be 2 bytes of length
+    if(crcString.length &#x3D;&#x3D;&#x3D; 2) {
+      crcString &#x3D; &#x27;00&#x27;.concat(crcString);
+    }
+    sendBuffer &#x3D; Buffer.concat([sendBuffer, new Buffer(crcString, &quot;hex&quot;)]);
+  }
+  else {
+    // Count only the blockData into the checksum
+    for(i &#x3D; 3; i &amp;lt; sendBuffer.length; i++) {
+      crcCalc &#x3D; crcCalc + sendBuffer.readUInt8(i);
+    }
+    crcCalc &#x3D; crcCalc % 256;
+    crcCalc &#x3D; crcCalc.toString(16);
+    if((crcCalc.length % 2) !&#x3D; 0) {
+      // Add padding for the string to be even
+      crcCalc &#x3D; &quot;0&quot; + crcCalc;
+    }
+    sendBuffer &#x3D; Buffer.concat([sendBuffer, new Buffer(crcCalc, &quot;hex&quot;)]);
+  }
+  log.info(&#x27;Sending buffer with total length: &#x27; + sendBuffer.length);
+  socket.write(sendBuffer);
+};
+
+var receiveBlock &#x3D; function(socket, blockNr, blockData, block_size, mode, callback) {
+  var cmd &#x3D; blockData[0];
+  var block &#x3D; parseInt(blockData[1]);
+  var block_check &#x3D; parseInt(blockData[2]);
+  var current_block;
+  var checksum_length &#x3D; mode &#x3D;&#x3D;&#x3D; &#x27;crc&#x27; ? 2 : 1;
+
+  if(cmd &#x3D;&#x3D;&#x3D; SOH) {
+    if((block + block_check) &#x3D;&#x3D;&#x3D; 0xFF) {
+      // Are we expecting this block?
+      if(block &#x3D;&#x3D;&#x3D; (blockNr % 0x100)) {
+        current_block &#x3D; blockData.slice(3, blockData.length-checksum_length);
+      }
+      else {
+        log.error(&#x27;ERROR: Synch issue! Received: &#x27; + block + &#x27; Expected: &#x27; + blockNr);
+        return;
+      }
+    }
+    else {
+      log.error(&#x27;ERROR: Block integrity check failed!&#x27;);
+      socket.write(new Buffer([NAK]));
+      return;
+    }
+    
+    if(current_block.length &#x3D;&#x3D;&#x3D; block_size) {
+      socket.write(new Buffer([ACK]));
+      callback(current_block);
+    }
+    else {
+      log.error(&#x27;ERROR: Received block size did not match the expected size. Received: &#x27; + current_block.length + &#x27; | Expected: &#x27; + block_size);
+      socket.write(new Buffer([NAK]));
+      return;
+    }
+  }
+  else {
+    log.error(&#x27;ERROR!&#x27;);
+    return;
+  }
+};
+
+var writeFile &#x3D; function(buffer, filename, callback) {
+  log.info(&#x27;writeFile called&#x27;);
+  var fileStream &#x3D; fs.createWriteStream(filename);
+  fileStream.once(&#x27;open&#x27;, function(fd) {
+    log.info(&#x27;File stream opened, buffer length: &#x27; + buffer.length);
+    for(i &#x3D; 0; i &amp;lt; buffer.length; i++) {
+      fileStream.write(buffer[i]);
+    }
+    fileStream.end();
+    log.info(&#x27;File written&#x27;);
+    callback();
+  });
+};</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.4.3 on June 26, 2017.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/jquery.cookie.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

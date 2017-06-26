@@ -1,0 +1,386 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.4.3">
+  <meta charset="utf-8">
+  <title>xmodem.js 0.0.1 &raquo; Class: Xmodem</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">xmodem.<wbr>js 0.<wbr>0.<wbr>1</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span></div>
+            <h1><small></small><span class="symbol-name">Xmodem</span></h1>
+            <p class="source-link">Source: <a href="index.js.html">index.<wbr>js</a></p>
+            <div class="symbol-classdesc">
+              <p>XMODEM Protocol in JavaScript</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="Xmodem.html#block_size">block_size</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="Xmodem.html#timeout_seconds">timeout_seconds</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="Xmodem.html#VERSION">VERSION</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="Xmodem.html#XMODEM_CRC_ATTEMPTS">XMODEM_CRC_ATTEMPTS</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="Xmodem.html#XMODEM_MAX_ERRORS">XMODEM_MAX_ERRORS</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="Xmodem.html#XMODEM_MAX_TIMEOUTS">XMODEM_MAX_TIMEOUTS</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="Xmodem.html#XMODEM_OP_MODE">XMODEM_OP_MODE</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="Xmodem.html#XMODEM_START_BLOCK">XMODEM_START_BLOCK</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="Xmodem.html#receive">receive(socket, filename)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="Xmodem.html#send">send(socket, dataBuffer)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Events</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="Xmodem.html#event:ready">ready</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="Xmodem.html#event:start">start</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="Xmodem">new&nbsp;<span class="symbol-name">Xmodem</span><span class="signature"><span class="signature-params">()</span></span>
+            </h2>
+            <p>Instantiate by <code>var xmodem = require('xmodem.js');</code></p>
+            <dl class="dl-compact">
+              <dt>License</dt>
+              <dd>http://spdx.org/licenses/BSD-2-Clause</dd>
+            </dl>
+          </section>
+          <section>
+            <h2>Properties</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
+              <h3 id="block_size"><span class="symbol-name">block_size</span><small class="property-type">
+            &nbsp;integer</small></h3>
+              <p>how many bytes (excluding header &amp; checksum) in each block? Don't change this<br>unless you have need for non-standard implementation.</p>
+              <dl class="dl-compact">
+                <dt>Default value</dt>
+                <dd>128</dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
+              <h3 id="timeout_seconds"><span class="symbol-name">timeout_seconds</span><small class="property-type">
+            &nbsp;integer</small></h3>
+              <p>default timeout period in seconds</p>
+              <dl class="dl-compact">
+                <dt>Default value</dt>
+                <dd>10</dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
+              <h3 id="VERSION"><span class="symbol-name">VERSION</span><small class="property-type">
+            &nbsp;string</small></h3>
+              <p>xmodem.js package version.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
+              <h3 id="XMODEM_CRC_ATTEMPTS"><span class="symbol-name">XMODEM_CRC_ATTEMPTS</span><small class="property-type">
+            &nbsp;integer</small></h3>
+              <p>how many times should receiver attempt to use CRC?</p>
+              <dl class="dl-compact">
+                <dt>Default value</dt>
+                <dd>3</dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
+              <h3 id="XMODEM_MAX_ERRORS"><span class="symbol-name">XMODEM_MAX_ERRORS</span><small class="property-type">
+            &nbsp;integer</small></h3>
+              <p>how many errors on a single block before the receiver gives up?</p>
+              <dl class="dl-compact">
+                <dt>Default value</dt>
+                <dd>10</dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
+              <h3 id="XMODEM_MAX_TIMEOUTS"><span class="symbol-name">XMODEM_MAX_TIMEOUTS</span><small class="property-type">
+            &nbsp;integer</small></h3>
+              <p>how many timeouts in a row before the sender gives up?</p>
+              <dl class="dl-compact">
+                <dt>Default value</dt>
+                <dd>5</dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
+              <h3 id="XMODEM_OP_MODE"><span class="symbol-name">XMODEM_OP_MODE</span><small class="property-type">
+            &nbsp;string</small></h3>
+              <p>Try to use XMODEM-CRC extension or not? Valid options: 'crc' or 'normal'</p>
+              <dl class="dl-compact">
+                <dt>Default value</dt>
+                <dd>crc</dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
+              <h3 id="XMODEM_START_BLOCK"><span class="symbol-name">XMODEM_START_BLOCK</span><small class="property-type">
+            &nbsp;integer</small></h3>
+              <p>First block number. Don't change this unless you have need for non-standard<br>implementation.</p>
+              <dl class="dl-compact">
+                <dt>Default value</dt>
+                <dd>1</dd>
+              </dl>
+            </section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="receive"><span class="symbol-name">receive</span><span class="signature"><span class="signature-params">(socket, filename)</span></span>
+              </h3>
+              <p>Receive a file using XMODEM protocol</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>socket</p>
+                      </td>
+                      <td>
+                        <p>socket</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>net.Socket() or Serialport socket for transport</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>filename</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>pathname where to save the transferred file</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="send"><span class="symbol-name">send</span><span class="signature"><span class="signature-params">(socket, dataBuffer)</span></span>
+              </h3>
+              <p>Send a file using XMODEM protocol</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>socket</p>
+                      </td>
+                      <td>
+                        <p>socket</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>net.Socket() or Serialport socket for transport</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dataBuffer</p>
+                      </td>
+                      <td>
+                        <p>buffer</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Buffer() to be sent</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Events</h2>
+            <section>
+              <h3 id="event:ready"><span class="symbol-name">ready</span></h3>
+              <p>Ready to send event, buffer has been broken into individual blocks to be sent.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>&#8212;</p>
+                      </td>
+                      <td>
+                        <p>integer</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Indicates how many blocks are ready for transmission</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:start"><span class="symbol-name">start</span></h3>
+              <p>Transmission Start event. A successful start of transmission.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>&#8212;</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Indicates transmission mode 'crc' or 'normal'</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.4.3 on June 26, 2017.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/jquery.cookie.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>
