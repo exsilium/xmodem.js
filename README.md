@@ -2,7 +2,7 @@
 
 # xmodem.js
 
-XMODEM is a simple file transfer protocol. This project implements the protocol in JavaScript
+XMODEM is a simple file transfer protocol. This project implements the protocol in JavaScript. Please see the [API docs](https://exsilium.github.io/xmodem.js/) for more details.
 
 # Installation
 
