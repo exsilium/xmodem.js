@@ -64,6 +64,14 @@ describe('XMODEM Send - multiple', function() {
     done();
   });
   
+  it('server should close', function(done) {
+    server.once('close', function() {
+      done();
+    });
+    
+    server.close();
+  });
+  
   // Time for another send
   
    it('rz should connect and start receiving - crc', function(done) {

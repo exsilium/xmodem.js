@@ -58,6 +58,14 @@ describe('XMODEM Send - Receive', function() {
     assert.equal(0, server._connections);
     done();
   });
+  
+  it('server should close', function(done) {
+    server.once('close', function() {
+      done();
+    });
+    
+    server.close();
+  });
 
   // Checksum send-receive
 
