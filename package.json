@@ -4,8 +4,8 @@
   "description": "XMODEM implementation in JavaScript",
   "main": "lib/index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha -S --bail --reporter mochawesome",
-    "test-cov": "XMODEM_COV=1 node_modules/.bin/mocha -S --bail --reporter mocha-lcov-reporter",
+    "test": "node_modules/.bin/mocha -S --bail --reporter mochawesome --exit",
+    "test-cov": "XMODEM_COV=1 node_modules/.bin/mocha -S --bail --reporter mocha-lcov-reporter --exit",
     "gendoc": "node_modules/.bin/jsdoc -c ./doc/jsdoc.conf -t ./node_modules/jsdoc-baseline -u ./doc/"
   },
   "keywords": [
