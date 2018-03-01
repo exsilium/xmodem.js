@@ -1,6 +1,6 @@
 {
   "name": "xmodem.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "XMODEM implementation in JavaScript",
   "main": "lib/index.js",
   "scripts": {
@@ -20,20 +20,20 @@
     "url": "https://github.com/exsilium/xmodem.js.git"
   },
   "dependencies": {
-    "crc": "~3.4.4"
+    "crc": "~3.5.0"
   },
   "devDependencies": {
-    "tracer": "^0.8.9",
-    "mocha": "^3.4.2",
-    "chai": "^4.0.0",
+    "tracer": "^0.8.12",
+    "mocha": "^5.0.1",
+    "chai": "^4.1.2",
     "jscoverage": "~0.6.0",
-    "mochawesome": "^2.2.1",
+    "mochawesome": "^3.0.2",
     "mocha-lcov-reporter": "~1.3.0",
-    "coveralls": "~2.13.1",
-    "md5-file": "^3.1.1",
+    "coveralls": "~3.0.0",
+    "md5-file": "^3.2.3",
     "command-exists": "~1.2.2",
-    "serialport": "~4.0.7",
-    "jsdoc": "^3.4.3",
+    "serialport": "~6.1.1",
+    "jsdoc": "^3.5.5",
     "jsdoc-baseline": "https://github.com/hegemonic/baseline/tarball/master"
   }
 }

@@ -14,8 +14,8 @@ sendFile = '/tmp/xmodem.file.send';
 describe('XMODEM Basic', function() {
   var xmodem = require(libpath + '/index');
   describe('Version check', function() {
-    it('should return 0.0.1', function() {
-      assert.equal('0.0.1', xmodem.VERSION);
+    it('should return 0.0.2', function() {
+      assert.equal('0.0.2', xmodem.VERSION);
     });
   });
 
