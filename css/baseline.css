@@ -4608,6 +4608,13 @@ dd > p {
   padding: 0.1em 0.5em 0.1em;
   text-transform: uppercase;
 }
+.label-async {
+  background-color: #C5E1A5;
+}
+.label-generator {
+  background-color: #9FA8DA;
+}
+.label-package,
 .label-private,
 .label-protected,
 .label-public {
