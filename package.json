@@ -32,7 +32,7 @@
     "coveralls": "~3.0.0",
     "md5-file": "^3.2.3",
     "command-exists": "~1.2.2",
-    "serialport": "~6.1.1",
+    "serialport": "~7.1.5",
     "jsdoc": "^3.5.5",
     "jsdoc-baseline": "https://github.com/hegemonic/baseline/tarball/222e13a"
   }
