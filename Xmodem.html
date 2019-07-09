@@ -2,9 +2,9 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.5.5">
+  <meta name="generator" content="JSDoc 3.6.2">
   <meta charset="utf-8">
-  <title>xmodem.js 0.0.2 &raquo; Class: Xmodem</title>
+  <title>xmodem.js 0.1.0 &raquo; Class: Xmodem</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
@@ -15,7 +15,7 @@
   <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
     <div id="jsdoc-navbar-container">
       <div id="jsdoc-navbar-content">
-        <a href="index.html" class="jsdoc-navbar-package-name">xmodem.<wbr>js 0.<wbr>0.<wbr>2</a>
+        <a href="index.html" class="jsdoc-navbar-package-name">xmodem.<wbr>js 0.<wbr>1.<wbr>0</a>
       </div>
     </div>
   </nav>
@@ -119,8 +119,7 @@
             </div>
           </section>
           <section>
-            <h2 id="Xmodem">new&nbsp;<span class="symbol-name">Xmodem</span><span class="signature"><span class="signature-params">()</span></span>
-            </h2>
+            <h2 id="Xmodem">new&nbsp;<span class="symbol-name">Xmodem</span><span class="signature"><span class="signature-params">()</span></span></h2>
             <p>Instantiate by <code>var xmodem = require('xmodem.js');</code></p>
             <dl class="dl-compact">
               <dt>License</dt>
@@ -132,15 +131,16 @@
             <section>
               <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
               <h3 id="block_size"><span class="symbol-name">block_size</span><small class="property-type">
-            &nbsp;integer</small></h3>
-              <p>how many bytes (excluding header &amp; checksum) in each block? Don't change this<br>unless you have need for non-standard implementation.</p>
+                  &nbsp;integer</small></h3>
+              <p>how many bytes (excluding header &amp; checksum) in each block? Don't change this<br>
+                unless you have need for non-standard implementation.</p>
               <dl class="dl-compact">
                 <dt>Default value</dt>
                 <dd>128</dd>
               </dl>
               <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
               <h3 id="timeout_seconds"><span class="symbol-name">timeout_seconds</span><small class="property-type">
-            &nbsp;integer</small></h3>
+                  &nbsp;integer</small></h3>
               <p>default timeout period in seconds</p>
               <dl class="dl-compact">
                 <dt>Default value</dt>
@@ -148,13 +148,13 @@
               </dl>
               <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
               <h3 id="VERSION"><span class="symbol-name">VERSION</span><small class="property-type">
-            &nbsp;string</small></h3>
+                  &nbsp;string</small></h3>
               <p>xmodem.js package version.</p>
               <dl class="dl-compact">
               </dl>
               <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
               <h3 id="XMODEM_CRC_ATTEMPTS"><span class="symbol-name">XMODEM_CRC_ATTEMPTS</span><small class="property-type">
-            &nbsp;integer</small></h3>
+                  &nbsp;integer</small></h3>
               <p>how many times should receiver attempt to use CRC?</p>
               <dl class="dl-compact">
                 <dt>Default value</dt>
@@ -162,7 +162,7 @@
               </dl>
               <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
               <h3 id="XMODEM_MAX_ERRORS"><span class="symbol-name">XMODEM_MAX_ERRORS</span><small class="property-type">
-            &nbsp;integer</small></h3>
+                  &nbsp;integer</small></h3>
               <p>how many errors on a single block before the receiver gives up?</p>
               <dl class="dl-compact">
                 <dt>Default value</dt>
@@ -170,7 +170,7 @@
               </dl>
               <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
               <h3 id="XMODEM_MAX_TIMEOUTS"><span class="symbol-name">XMODEM_MAX_TIMEOUTS</span><small class="property-type">
-            &nbsp;integer</small></h3>
+                  &nbsp;integer</small></h3>
               <p>how many timeouts in a row before the sender gives up?</p>
               <dl class="dl-compact">
                 <dt>Default value</dt>
@@ -178,7 +178,7 @@
               </dl>
               <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
               <h3 id="XMODEM_OP_MODE"><span class="symbol-name">XMODEM_OP_MODE</span><small class="property-type">
-            &nbsp;string</small></h3>
+                  &nbsp;string</small></h3>
               <p>Try to use XMODEM-CRC extension or not? Valid options: 'crc' or 'normal'</p>
               <dl class="dl-compact">
                 <dt>Default value</dt>
@@ -186,8 +186,9 @@
               </dl>
               <div class="symbol-detail-labels"><span class="label label-constant">constant</span></div>
               <h3 id="XMODEM_START_BLOCK"><span class="symbol-name">XMODEM_START_BLOCK</span><small class="property-type">
-            &nbsp;integer</small></h3>
-              <p>First block number. Don't change this unless you have need for non-standard<br>implementation.</p>
+                  &nbsp;integer</small></h3>
+              <p>First block number. Don't change this unless you have need for non-standard<br>
+                implementation.</p>
               <dl class="dl-compact">
                 <dt>Default value</dt>
                 <dd>1</dd>
@@ -195,8 +196,7 @@
             </section>
             <h2>Methods</h2>
             <section>
-              <h3 id="receive"><span class="symbol-name">receive</span><span class="signature"><span class="signature-params">(socket, filename)</span></span>
-              </h3>
+              <h3 id="receive"><span class="symbol-name">receive</span><span class="signature"><span class="signature-params">(socket, filename)</span></span></h3>
               <p>Receive a file using XMODEM protocol</p>
               <section>
                 <h4>Parameters</h4>
@@ -243,8 +243,7 @@
               </section>
               <dl class="dl-compact">
               </dl>
-              <h3 id="send"><span class="symbol-name">send</span><span class="signature"><span class="signature-params">(socket, dataBuffer)</span></span>
-              </h3>
+              <h3 id="send"><span class="symbol-name">send</span><span class="signature"><span class="signature-params">(socket, dataBuffer)</span></span></h3>
               <p>Send a file using XMODEM protocol</p>
               <section>
                 <h4>Parameters</h4>
@@ -370,7 +369,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.5.5 on March 2, 2018.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.2 on July 9, 2019.
       </p>
     </div>
   </footer>
