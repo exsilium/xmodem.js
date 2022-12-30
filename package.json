@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "tracer": "^0.9.8",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "chai": "^4.2.0",
     "jscoverage": "~0.6.0",
     "mochawesome": "^4.0.1",
